@@ -13,20 +13,16 @@ const contentType = {
 const renderStatic = (req, res) => {
 
   const filePath = `./public${req.url === '/' ? '/index.html' : req.url}`;
-  
   const ext = extname(filePath);
 
   try {
-
     const data = readFileSync(filePath);
     res.writeHead(200, { 'Content-Type': contentType[ext] });
     res.end(data, 'utf-8');
-
-  } catch(e) {
-
+  }
+  catch(e) {
     res.writeHead(500);
     res.end(`Error with code ${e.code} occured`);
-
   }
 }
 

@@ -1,8 +1,13 @@
 {
   "name": "whatsapp-chat",
   "version": "0.0.1",
+  "homepage": "https://jooffinhalli.github.io/whatsappChat/",
   "scripts": {
+    "prebuild": "npm i",
     "build": "webpack",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d public",
+    "postdeploy": "echo \"check https://jooffinhalli.github.io/whatsappChat/\"",
     "watch": "webpack --config webpack.dev.js --watch",
     "server": "node devServer.js",
     "start": "npm-run-all --parallel watch server"
