@@ -5,7 +5,7 @@ export const App: FC = () => {
 
   return (
     <div className={styles.wrapper}>
-      hello
+      hello from gh-pages
     </div>
   );
 };
