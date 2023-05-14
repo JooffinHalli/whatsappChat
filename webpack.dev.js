@@ -7,6 +7,6 @@ module.exports = {
   mode: "development",
   plugins: [
     ...commonConfig.plugins,
-    new OpenBrowserPlugin({ url: process.env.APP_LOCAL_HOST })
+    // new OpenBrowserPlugin({ url: process.env.APP_LOCAL_HOST })
   ]
 };

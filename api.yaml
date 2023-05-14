@@ -1,0 +1,251 @@
+openapi: 3.0.2
+
+info:
+  title: WhatsAppChatApi
+  description: Описание API для сервиса WhatsAppChatApi
+  version: 0.0.1
+
+externalDocs:
+  description: Ссылка на документацию GREEN API
+  url: https://site.sw.slonbook.com/docs/
+    
+tags:
+  - name: Sending
+    description: Методы отправки сообщений
+  - name: Receiving
+    description: Методы получения сообщений
+  - name: Journals
+    description: Методы истории сообщений
+
+paths:
+  /receiveNotification:
+    get:
+      tags:
+        - "Receiving"
+      operationId: receiveNotification
+      summary: Отправить текстовое сообщение
+      description: документация - https://green-api.com/docs/api/receiving/technology-http-api/ReceiveNotification/
+      responses:
+        200:
+          $ref: "#/components/responses/receiveNotification"
+        400:
+          $ref: "#/components/responses/Error400"
+        429:
+          $ref: "#/components/responses/Error429"
+        466:
+          $ref: "#/components/responses/Error466"
+        500:
+          $ref: "#/components/responses/Error500"
+  /sendMessage:
+    post:
+      tags:
+        - "Sending"
+      operationId: sendMessage
+      summary: Отправить текстовое сообщение
+      description: документация - https://green-api.com/docs/api/sending/SendMessage/
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/sendMessageDto"
+      responses:
+        200:
+          $ref: "#/components/responses/sendMessage"
+        400:
+          $ref: "#/components/responses/Error400"
+        429:
+          $ref: "#/components/responses/Error429"
+        466:
+          $ref: "#/components/responses/Error466"
+        500:
+          $ref: "#/components/responses/Error500"
+
+#  -------------------------------------------------------------------------------------------------------------------
+
+components:
+  responses:
+    receiveNotification:
+      description: Ответ метода receiveNotification
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/receiveNotificationRes"
+    sendMessage:
+      description: Ответ метода sendMessage
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/sendMessageRes"
+
+    Error400:
+      description: bad request data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorModel"
+    Error429:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorModel"
+    Error466:
+      description: correspondentsStatus
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorModel"
+    Error500:
+      description: "File from url exceeded max upload size. Size: XXXXmb Limit: 100mb Url:"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorModel"
+
+  schemas:
+    sendMessageDto:
+      title: sendMessageDto
+      type: object
+      description: Тело запроса для метода sendMessage
+      required:
+        - "chatId"
+        - "message"
+      properties:
+        chatId:
+          type: string
+          description: Идентификатор чата
+        message:
+          type: string
+          description: Текст сообщения. Поддерживаются символы emoji 😃
+        quotedMessageId:
+          type: string
+          description: Идентификатор цитируемого сообщения,если указан то сообщение отправится с цитированием указанного сообщения чата
+        archiveChat:
+          type: string
+          description: "Помещает в архив чат, в который отправлено сообщение. Принимает значения: true"
+        linkPreview:
+          type: string
+          description: "Параметр включает отображение превью и описание ссылки. По умолчанию включен. Принимает значения: true/false"
+
+    receiveNotificationRes:
+      title: receiveNotificationRes
+      type: object
+      required:
+        - "receiptId"
+        - "body"
+      properties:
+        receiptId:
+          type: integer
+          description: Идентификатор доставки для удаления входящего уведомления методом DeleteNotification
+        body:
+          type: object
+          description: Входящее уведомление согласно Формату входящих уведомлений
+          required:
+            - "typeWebhook"
+            - "instanceData"
+            - "timestamp"
+            - "idMessage"
+            - "senderData"
+            - "messageData"
+          properties:
+            typeWebhook:
+              type: string
+            instanceData:
+              type: object
+              required:
+                - "idInstance"
+                - "wid"
+                - "typeInstance"
+              properties:
+                idInstance:
+                  type: integer
+                wid:
+                  type: string
+                typeInstance:
+                  type: string
+            timestamp:
+              type: integer
+            idMessage:
+              type: string
+            senderData:
+              type: object
+              required:
+                - "chatId"
+                - "sender"
+                - "senderName"
+              properties:
+                chatId:
+                  type: string
+                sender:
+                  type: string
+                senderName:
+                  type: string
+            messageData:
+              type: object
+              required:
+                - "typeMessage"
+                - "textMessageData"
+              properties:
+                typeMessage:
+                  type: string
+                textMessageData:
+                  type: object
+                  required:
+                    - "textMessage"
+                  properties:
+                    textMessage:
+                      type: string
+
+      example:
+        receiptId: 1234567
+        body:
+          typeWebhook: "incomingMessageReceived"
+          instanceData:
+            idInstance: 1234,
+            wid: "11001234567@c.us"
+            typeInstance: "whatsapp"
+          timestamp: 1588091580
+          idMessage: "F7AEC1B7086ECDC7E6E45923F5EDB825"
+          senderData:
+            chatId: "79001234568@c.us"
+            sender: "79001234568@c.us"
+            senderName: "Green API"
+          messageData:
+            typeMessage: "textMessage"
+            textMessageData:
+              textMessage:"I use Green-API to send this message to you!"
+    sendMessageRes:
+      title: sendMessageRes
+      type: object
+      required:
+        - "idMessage"
+      properties:
+        idMessage:
+          type: string
+          description: Идентификатор отправленного сообщения
+      example:
+        idMessage: "1"
+
+    ErrorModel:
+      title: ErrorModel
+      type: object
+      required:
+        - "number"
+        - "timestamp"
+        - "path"
+        - "message"
+      properties:
+        statusCode:
+          type: number
+        timestamp:
+          type: string
+        path:
+          type: string
+        message:
+          type: string
+      example:
+        statusCode: 400
+        timestamp: "2023-05-14T09:19:01.738Z"
+        path: "/waInstance1111111111/methods/xxx"
+        message: "some error"

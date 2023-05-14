@@ -5,12 +5,13 @@
   "scripts": {
     "prebuild": "npm i",
     "build": "webpack",
+    "watch": "webpack --config webpack.dev.js --watch",
+    "server": "node devServer.js",
+    "start": "npm-run-all --parallel watch server",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d public",
     "postdeploy": "echo \"check https://jooffinhalli.github.io/whatsappChat/\"",
-    "watch": "webpack --config webpack.dev.js --watch",
-    "server": "node devServer.js",
-    "start": "npm-run-all --parallel watch server"
+    "api": "cd npm-scripts && npm run api https://github.com/JooffinHalli/whatsappChat.git main"
   },
   "dependencies": {
     "classnames": "^2.3.1",
