@@ -1,6 +1,7 @@
-const { ProvidePlugin } = require("webpack");
+const { ProvidePlugin, DefinePlugin } = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
+require("dotenv").config({ path: "./.env" });
 
 module.exports = {
   entry: "./src/index.tsx",
@@ -11,6 +12,9 @@ module.exports = {
       app: path.resolve(__dirname, "src/app"),
       utils: path.resolve(__dirname, "src/utils")
     }
+  },
+  optimization: {
+    minimize: true
   },
   module: {
     rules: [
@@ -34,11 +38,13 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "style.css",
-      chunkFilename: "[id].css"
+      filename: "style.css"
     }),
     new ProvidePlugin({
       "React": "react"
+    }),
+    new DefinePlugin({
+      _API_HOST_: JSON.stringify(process.env.API_HOST),
     })
   ]
 };
