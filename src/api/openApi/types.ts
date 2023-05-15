@@ -8,6 +8,21 @@
 */
 
 export type Docs = {
+  'sendMessage': {
+    path: `sendMessage`
+    post: {
+      body: {
+        chatId: string
+        message: string
+        quotedMessageId?: string
+        archiveChat?: string
+        linkPreview?: string
+      }
+      res: {
+        idMessage: string
+      }
+    }
+  }
   'receiveNotification': {
     path: `receiveNotification`
     get: {
@@ -37,19 +52,33 @@ export type Docs = {
       }
     }
   }
-  'sendMessage': {
-    path: `sendMessage`
+  'deleteNotification': {
+    path: `deleteNotification/${string}`
+    delete: {
+      res: {
+        result: boolean
+      }
+    }
+  }
+  'getChatHistory': {
+    path: `getChatHistory`
     post: {
       body: {
         chatId: string
-        message: string
-        quotedMessageId?: string
-        archiveChat?: string
-        linkPreview?: string
+        count: number
       }
-      res: {
-        idMessage: string
-      }
+      res: Array<
+        {
+          type: string
+          timestamp: number
+          idMessage: string
+          typeMessage: string
+          chatId: string
+          senderId?: string
+          senderName: string
+          textMessage: string
+        }
+      >
     }
   }
 };
