@@ -1,4 +1,4 @@
-import { Union, _ } from "utils";
+import { Obj, Union, _ } from "utils";
 
 // once written generic makes life easier in the future
 
@@ -56,7 +56,25 @@ type OpenapiPaths<D extends DocsBase> = {
 export type Config<D extends DocsBase> = {
   IdInstance: number
   ApiTokenInstance: string
+  /** Поле paths из openapi */
   openapi: OpenapiPaths<D>
+  /** Ошибки на различные события */
+  errors?: {
+    /** Если не удалось установить соединение с сервером */
+    connection?: string
+    /** любая неизвестная ошибка на сервере */
+    unknown?: string
+    /** Если пришел статус не описанный в openapi */
+    wrongStatus?: string
+    /** Если пришел header не описанный в openapi */
+    wrongHeaders?: string
+    /** Если пришел другой формат данных, например, ожидался json, пришел blob */
+    resType?: string
+    /** Если интерфейс даты из респонса не соответствует схеме из openapi */
+    typeGuard?: string
+    /** Сообщение ошибки, которое выбросится при ручном аборте запроса */
+    abort?: string
+  }
 }
 
 type MethodField<
@@ -79,7 +97,18 @@ type Path<
     ? E extends P ? { path?: P } : { path: P }
     : { path?: E }
 
-type MethodArgs<
+    export type ExtraArgs = {
+      /**
+       * указываем, какой тип данных ожидаем с сервера,
+       * в зависимости от этого поля у респонса будет вызываться соответствующий метод,
+       * по дефолту стоит `json`
+       */
+      responseType?: 'json' | 'text' | 'formData' | 'blob' | 'arrayBuffer'
+      /** экземпляр класса AbortController, нужен для прерывания запросов */
+      abortController?: AbortController
+    }
+
+export type MethodArgs<
   D, // Docs
   E extends string, // Endpoint
   M extends string, // HttpMethod
@@ -88,8 +117,9 @@ type MethodArgs<
   & Path<D, E>
   & MethodField<D, E, M, 'body'>
   & { headers?: Http.RequestHeaders }
+  & ExtraArgs
 
-type MethodRes<
+export type MethodRes<
   D, // Docs
   E extends string, // Endpoint
   M extends string, // HttpMethod
@@ -102,14 +132,24 @@ type MethodRes<
     }
   } ? R : never;
 
-type MethodFn<
+// export type MethodFn<
+//   D, // Docs
+//   E extends string, // Endpoint
+//   M extends string, // HttpMethod
+// > =
+//   [keyof MethodArgs<D, E, M>] extends {}
+//     ? (args?: MethodArgs<D, E, M>) => Promise<MethodRes<D, E, M>>
+//     : (args: MethodArgs<D, E, M>) => Promise<MethodRes<D, E, M>>
+
+export type MethodFn<
   D, // Docs
   E extends string, // Endpoint
   M extends string, // HttpMethod
 > =
-  [keyof MethodArgs<D, E, M>] extends {}
-    ? (args?: MethodArgs<D, E, M>) => Promise<MethodRes<D, E, M>>
-    : (args: MethodArgs<D, E, M>) => Promise<MethodRes<D, E, M>>
+  Obj.MaybeEmpty<MethodArgs<D, E, M>> extends true
+    ? (args?: Obj.Undefinedable<MethodArgs<D, E, M>>) => Promise<_.Defined<MethodField<D, E, M, 'res'>['res']>>
+    : (args: MethodArgs<D, E, M>) => Promise<_.Defined<MethodField<D, E, M, 'res'>['res']>>;
+  
 
 /** готовый API на выходе */
 export type Api<D extends DocsBase> = {

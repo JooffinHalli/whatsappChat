@@ -32,6 +32,32 @@ export const schemas = {
       }
     }
   },
+  getChatHistoryDto: {
+    type: 'object',
+    required: [
+      'chatId',
+      'count'
+    ],
+    properties: {
+      chatId: {
+        type: 'string'
+      },
+      count: {
+        type: 'integer'
+      }
+    }
+  },
+  sendMessageRes: {
+    type: 'object',
+    required: [
+      'idMessage'
+    ],
+    properties: {
+      idMessage: {
+        type: 'string'
+      }
+    }
+  },
   receiveNotificationRes: {
     type: 'object',
     required: [
@@ -127,14 +153,54 @@ export const schemas = {
       }
     }
   },
-  sendMessageRes: {
+  deleteNotificationRes: {
     type: 'object',
     required: [
-      'idMessage'
+      'result'
     ],
     properties: {
-      idMessage: {
-        type: 'string'
+      result: {
+        type: 'boolean'
+      }
+    }
+  },
+  getChatHistoryRes: {
+    type: 'array',
+    items: {
+      required: [
+        'type',
+        'timestamp',
+        'idMessage',
+        'typeMessage',
+        'chatId',
+        'senderName',
+        'textMessage'
+      ],
+      properties: {
+        type: {
+          type: 'string'
+        },
+        timestamp: {
+          type: 'integer'
+        },
+        idMessage: {
+          type: 'string'
+        },
+        typeMessage: {
+          type: 'string'
+        },
+        chatId: {
+          type: 'string'
+        },
+        senderId: {
+          type: 'string'
+        },
+        senderName: {
+          type: 'string'
+        },
+        textMessage: {
+          type: 'string'
+        }
       }
     }
   },
