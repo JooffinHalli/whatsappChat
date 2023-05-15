@@ -37,9 +37,7 @@ module.exports = {
     path: path.join(__dirname, "/public/dist")
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: "style.css"
-    }),
+    new MiniCssExtractPlugin(),
     new ProvidePlugin({
       "React": "react"
     }),

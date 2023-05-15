@@ -29,8 +29,11 @@ function runScript(apiJson) {
         }
         continue;
       }
+
+      const kHasSlashes = k.includes('/{');
+      const key = kHasSlashes ? `/${k.split('/')?.[1]}` : k;
   
-      acc[k] = isObj(el) ? validate(el) : el;
+      acc[key] = isObj(el) ? validate(el) : el;
   
     }
   
@@ -38,7 +41,7 @@ function runScript(apiJson) {
   }
 
   const content = toJson(validate(apiJson).paths)
-    .replaceAll(/(')(\/)(\w*)(')(:)/g, (match, p1, p2, p3) => `'${p3}':`);
+    .replaceAll(/(')(\/)(.*)(')(:)/g, (match, p1, p2, p3) => `'${p3}':`);
 
   const template = Template.content(
     repoLink,

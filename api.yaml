@@ -18,24 +18,6 @@ tags:
     description: Методы истории сообщений
 
 paths:
-  /receiveNotification:
-    get:
-      tags:
-        - "Receiving"
-      operationId: receiveNotification
-      summary: Отправить текстовое сообщение
-      description: документация - https://green-api.com/docs/api/receiving/technology-http-api/ReceiveNotification/
-      responses:
-        200:
-          $ref: "#/components/responses/receiveNotification"
-        400:
-          $ref: "#/components/responses/Error400"
-        429:
-          $ref: "#/components/responses/Error429"
-        466:
-          $ref: "#/components/responses/Error466"
-        500:
-          $ref: "#/components/responses/Error500"
   /sendMessage:
     post:
       tags:
@@ -60,23 +42,106 @@ paths:
           $ref: "#/components/responses/Error466"
         500:
           $ref: "#/components/responses/Error500"
+  /receiveNotification:
+    get:
+      tags:
+        - "Receiving"
+      operationId: receiveNotification
+      summary: Отправить текстовое сообщение
+      description: документация - https://green-api.com/docs/api/receiving/technology-http-api/ReceiveNotification/
+      responses:
+        200:
+          $ref: "#/components/responses/receiveNotification"
+        400:
+          $ref: "#/components/responses/Error400"
+        429:
+          $ref: "#/components/responses/Error429"
+        466:
+          $ref: "#/components/responses/Error466"
+        500:
+          $ref: "#/components/responses/Error500"
+  /deleteNotification/{receiptId}:
+    delete:
+      tags:
+        - "Receiving"
+      operationId: deleteNotification
+      summary: Удалить сообщение из очереди (отметить как прочитанное)
+      description: документация - https://green-api.com/en/docs/api/receiving/technology-http-api/DeleteNotification/
+      parameters:
+        - $ref: "#/components/parameters/receiptId"
+      responses:
+        200:
+          $ref: "#/components/responses/deleteNotification"
+        400:
+          $ref: "#/components/responses/Error400"
+        429:
+          $ref: "#/components/responses/Error429"
+        466:
+          $ref: "#/components/responses/Error466"
+        500:
+          $ref: "#/components/responses/Error500"
+  /getChatHistory:
+    post:
+      tags:
+        - "Journals"
+      operationId: getChatHistory
+      summary: Получить историю чата
+      description: документация - https://green-api.com/en/docs/api/journals/GetChatHistory/
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getChatHistoryDto"
+      responses:
+        200:
+          $ref: "#/components/responses/getChatHistory"
+        400:
+          $ref: "#/components/responses/Error400"
+        429:
+          $ref: "#/components/responses/Error429"
+        466:
+          $ref: "#/components/responses/Error466"
+        500:
+          $ref: "#/components/responses/Error500"
 
 #  -------------------------------------------------------------------------------------------------------------------
 
 components:
+  parameters:
+    receiptId:
+      name: receiptId
+      in: path
+      description: Receipt Id for deleting an incoming notification received by ReceiveNotification method
+      required: true
+      schema:
+        type: integer
+
   responses:
-    receiveNotification:
-      description: Ответ метода receiveNotification
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/receiveNotificationRes"
     sendMessage:
       description: Ответ метода sendMessage
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/sendMessageRes"
+    receiveNotification:
+      description: Ответ метода receiveNotification
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/receiveNotificationRes"
+    deleteNotification:
+      description: Ответ метода deleteNotification
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/deleteNotificationRes"
+    getChatHistory:
+      description: Ответ метода getChatHistory
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/getChatHistoryRes"
 
     Error400:
       description: bad request data
@@ -127,7 +192,34 @@ components:
         linkPreview:
           type: string
           description: "Параметр включает отображение превью и описание ссылки. По умолчанию включен. Принимает значения: true/false"
+    getChatHistoryDto:
+      title: getChatHistoryDto
+      type: object
+      required:
+        - "chatId"
+        - "count"
+      properties:
+        chatId:
+          type: string
+          description: Personal or chat Id the message history of which you need to get
+        count:
+          type: integer
+          description: The number of messages to get. The default is 100
+      example:
+        chatId: "11001234567@c.us"
+        count: 10
 
+    sendMessageRes:
+      title: sendMessageRes
+      type: object
+      required:
+        - "idMessage"
+      properties:
+        idMessage:
+          type: string
+          description: Идентификатор отправленного сообщения
+      example:
+        idMessage: "1"
     receiveNotificationRes:
       title: receiveNotificationRes
       type: object
@@ -215,17 +307,71 @@ components:
             typeMessage: "textMessage"
             textMessageData:
               textMessage:"I use Green-API to send this message to you!"
-    sendMessageRes:
-      title: sendMessageRes
+    deleteNotificationRes:
+      title: deleteNotification
       type: object
       required:
-        - "idMessage"
+        - "result"
       properties:
-        idMessage:
-          type: string
-          description: Идентификатор отправленного сообщения
+        result:
+          type: boolean
+          description: "Incoming notification deleting result: true - incoming notification successfully deleted from the queue; false - notification is not deleted - possible, if the notification was deleted earlier or receiptId doesn't correspond to the value previously received by ReceiveNotification method"
       example:
-        idMessage: "1"
+        result: true
+    getChatHistoryRes:
+      title: getChatHistoryRes
+      type: array
+      items:
+        required:
+          - "type"
+          - "timestamp"
+          - "idMessage"
+          - "typeMessage"
+          - "chatId"
+          - "senderName"
+          - "textMessage"
+        properties:
+          type:
+            type: string
+          timestamp:
+            type: integer
+          idMessage:
+            type: string
+          typeMessage:
+            type: string
+          chatId:
+            type: string
+          senderId:
+            type: string
+          senderName:
+            type: string
+          textMessage:
+            type: string
+        example:
+          - type: "incoming"
+            timestamp: 1603964449
+            idMessage: "3AADDD555CB0822C0539"
+            typeMessage: "textMessage"
+            chatId: "11001234567@c.us"
+            senderId: "11001234567@c.us"
+            senderName: "Andrew Sh"
+            textMessage: "I use Green-API to get this message from you!"
+          - type: "outgoing"
+            timestamp: 1603964445
+            idMessage: "3EB08816FEBCCC3FACD2"
+            statusMessage: "read"
+            typeMessage: "textMessage"
+            chatId: "11001234567@c.us"
+            textMessage: "I use Green-API to send this message to you!"
+          - type: "incoming"
+            timestamp: 1603964444
+            idMessage: "3AA45F9F285C5249CDFC"
+            typeMessage: "imageMessage"
+            chatId: "11001234567@c.us"
+            senderId: "11001234567@c.us"
+            senderName: "Andrew Sh"
+            downloadUrl: http://api.green-api.com/waInstance9075/downloadFile/download-file-id"
+            caption: "Green-API Logo"
 
     ErrorModel:
       title: ErrorModel
@@ -249,3 +395,41 @@ components:
         timestamp: "2023-05-14T09:19:01.738Z"
         path: "/waInstance1111111111/methods/xxx"
         message: "some error"
+    LocationModel:
+      title: LocationModel
+      type: object
+      required:
+        - "nameLocation"
+        - "address"
+        - "latitude"
+        - "longitude"
+        - "jpegThumbnail"
+      properties:
+        nameLocation:
+          type: string
+          description: Location name
+        address:
+          type: string
+          description: Location address
+        latitude:
+          type: integer
+          description: Location latitude
+        longitude:
+          type: integer
+          description: Location longitude
+        jpegThumbnail:
+          type: string
+          description: base64-coded image preview
+    ContactModel:
+      title: LocationModel
+      type: object
+      required:
+        - "displayName"
+        - "vcard"
+      properties:
+        displayName:
+          type: string
+          description: Contact display name
+        vcard:
+          type: string
+          description: VCard structure (contact visit card)

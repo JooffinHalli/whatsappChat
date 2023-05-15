@@ -10,7 +10,24 @@
 import { schemas } from './schemas';
 
 export const components = {
+  parameters: {
+    receiptId: {
+      name: 'receiptId',
+      in: 'path',
+      required: true,
+      schema: {
+        type: 'integer'
+      }
+    }
+  },
   responses: {
+    sendMessage: {
+      content: {
+        'application/json': {
+          schema: schemas.sendMessageRes
+        }
+      }
+    },
     receiveNotification: {
       content: {
         'application/json': {
@@ -18,10 +35,17 @@ export const components = {
         }
       }
     },
-    sendMessage: {
+    deleteNotification: {
       content: {
         'application/json': {
-          schema: schemas.sendMessageRes
+          schema: schemas.deleteNotificationRes
+        }
+      }
+    },
+    getChatHistory: {
+      content: {
+        'application/json': {
+          schema: schemas.getChatHistoryRes
         }
       }
     },
@@ -56,8 +80,11 @@ export const components = {
   },
   schemas: {
     sendMessageDto: schemas.sendMessageDto,
-    receiveNotificationRes: schemas.receiveNotificationRes,
+    getChatHistoryDto: schemas.getChatHistoryDto,
     sendMessageRes: schemas.sendMessageRes,
+    receiveNotificationRes: schemas.receiveNotificationRes,
+    deleteNotificationRes: schemas.deleteNotificationRes,
+    getChatHistoryRes: schemas.getChatHistoryRes,
     ErrorModel: schemas.ErrorModel
   }
 } as const;
