@@ -28,15 +28,19 @@ export const Auth = t
 
   .actions((self) => ({
 
-    setIdInstance: (value: string) => {
+    setIdInstance: (value: string, shouldRemember: boolean) => {
       const _value = _.utf8_to_b64(value);
-      localStorage.setItem("IdInstance", _value);
+      if (shouldRemember) {
+        localStorage.setItem("IdInstance", _value);
+      }
       self.setIdInstanceSimple(value);
     },
 
-    setApiTokenInstance: (value: string) => {
+    setApiTokenInstance: (value: string, shouldRemember: boolean) => {
       const _value = _.utf8_to_b64(value);
-      localStorage.setItem("ApiTokenInstance", _value);
+      if (shouldRemember) {
+        localStorage.setItem("ApiTokenInstance", _value);
+      }
       self.setApiTokenInstanceSimple(value);
     },
 
