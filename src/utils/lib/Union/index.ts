@@ -1,4 +1,4 @@
-import { Arr } from 'utils';
+import { Arr } from "utils";
 
 /** утилиты для юнионов */
 export namespace Union {

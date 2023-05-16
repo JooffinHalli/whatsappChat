@@ -10,6 +10,8 @@ externalDocs:
   url: https://site.sw.slonbook.com/docs/
     
 tags:
+  - name: Account
+    description: Методы работы с аккаунтом
   - name: Sending
     description: Методы отправки сообщений
   - name: Receiving
@@ -52,6 +54,24 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/receiveNotification"
+        400:
+          $ref: "#/components/responses/Error400"
+        429:
+          $ref: "#/components/responses/Error429"
+        466:
+          $ref: "#/components/responses/Error466"
+        500:
+          $ref: "#/components/responses/Error500"
+  /getStateInstance:
+    get:
+      tags:
+        - "Account"
+      operationId: getStateInstance
+      summary: Метод предназначен для получения состояния аккаунта.
+      description: документация - https://green-api.com/docs/api/account/GetStateInstance/
+      responses:
+        200:
+          $ref: "#/components/responses/getStateInstance"
         400:
           $ref: "#/components/responses/Error400"
         429:
@@ -118,6 +138,12 @@ components:
         type: integer
 
   responses:
+    getStateInstance:
+      description: Ответ метода getStateInstance
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/getStateInstanceRes"
     sendMessage:
       description: Ответ метода sendMessage
       content:
@@ -209,6 +235,23 @@ components:
         chatId: "11001234567@c.us"
         count: 10
 
+    getStateInstanceRes:
+      title: getStateInstanceRes
+      type: object
+      required:
+        - "stateInstance"
+      properties:
+        stateInstance:
+          type: string
+          enum:
+            - "notAuthorized"
+            - "authorized"
+            - "blocked"
+            - "sleepMode"
+            - "starting"
+          description: Состояние аккаунта
+      example:
+        stateInstance: "authorized"
     sendMessageRes:
       title: sendMessageRes
       type: object
@@ -395,41 +438,3 @@ components:
         timestamp: "2023-05-14T09:19:01.738Z"
         path: "/waInstance1111111111/methods/xxx"
         message: "some error"
-    LocationModel:
-      title: LocationModel
-      type: object
-      required:
-        - "nameLocation"
-        - "address"
-        - "latitude"
-        - "longitude"
-        - "jpegThumbnail"
-      properties:
-        nameLocation:
-          type: string
-          description: Location name
-        address:
-          type: string
-          description: Location address
-        latitude:
-          type: integer
-          description: Location latitude
-        longitude:
-          type: integer
-          description: Location longitude
-        jpegThumbnail:
-          type: string
-          description: base64-coded image preview
-    ContactModel:
-      title: LocationModel
-      type: object
-      required:
-        - "displayName"
-        - "vcard"
-      properties:
-        displayName:
-          type: string
-          description: Contact display name
-        vcard:
-          type: string
-          description: VCard structure (contact visit card)

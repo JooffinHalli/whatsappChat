@@ -42,6 +42,18 @@ export const paths = {
       }
     }
   },
+  'getStateInstance': {
+    get: {
+      operationId: 'getStateInstance',
+      responses: {
+        200: components.responses.getStateInstance,
+        400: components.responses.Error400,
+        429: components.responses.Error429,
+        466: components.responses.Error466,
+        500: components.responses.Error500
+      }
+    }
+  },
   'deleteNotification': {
     delete: {
       operationId: 'deleteNotification',

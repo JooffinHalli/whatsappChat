@@ -14,7 +14,10 @@
     "api": "cd npm-scripts && npm run api https://github.com/JooffinHalli/whatsappChat.git main"
   },
   "dependencies": {
-    "classnames": "^2.3.1",
+    "antd": "^5.5.0",
+    "mobx": "^6.9.0",
+    "mobx-react-lite": "^3.4.3",
+    "mobx-state-tree": "^5.1.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

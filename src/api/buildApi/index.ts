@@ -3,24 +3,21 @@ import { Api, Config, DocsBase, MethodArgs } from "./types";
 import { ApiError, handleResData, isError, logError, normalizedErrors, serializedBody, validHeaders } from "./utils";
 import { API_HOST } from "./constants";
 import { assertSchema, getSchema } from "./openapiUtils";
+import { assertApiState, getApiState } from "api";
 
 export const buildApi = <D extends DocsBase>({
-  IdInstance,
-  ApiTokenInstance,
   openapi,
   errors
 }: Config<D>): Api<D> => {
 
-  const baseUrl = `${API_HOST}/waInstance${IdInstance}`;
   const _errors = normalizedErrors(errors);
-
+  
   const api = {} as Api<D>;
-
+  
   for (const method in openapi) {
     const methodSchema = openapi[method] || {};
     const httpMethod = Object.keys(methodSchema)[0];
     const methodName: Union.String<keyof Api<D>> = methodSchema[httpMethod].operationId || method;
-    const url = `${baseUrl}/${methodName}/${ApiTokenInstance}`;
 
     const _logError = (err: string) => logError({ method, err });
 
@@ -48,7 +45,14 @@ export const buildApi = <D extends DocsBase>({
         abortController = new AbortController()
       } = args;
 
-      const [methodName, ...pathWithoutMethod] = (path || "").split('/');
+      const { IdInstance, ApiTokenInstance } = getApiState();
+
+      assertApiState({ IdInstance, ApiTokenInstance });
+
+      const baseUrl = `${API_HOST}/waInstance${IdInstance}`;
+      const url = `${baseUrl}/${methodName}/${ApiTokenInstance}`;
+
+      const [_, ...pathWithoutMethod] = (path || "").split('/');
 
       const finalUrl = path
         ? `${url}/${pathWithoutMethod.join("/")}`
