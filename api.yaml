@@ -16,10 +16,26 @@ tags:
     description: Методы отправки сообщений
   - name: Receiving
     description: Методы получения сообщений
-  - name: Journals
-    description: Методы истории сообщений
 
 paths:
+  /getStateInstance:
+    get:
+      tags:
+        - "Account"
+      operationId: getStateInstance
+      summary: Метод предназначен для получения состояния аккаунта.
+      description: документация - https://green-api.com/docs/api/account/GetStateInstance/
+      responses:
+        200:
+          $ref: "#/components/responses/getStateInstance"
+        400:
+          $ref: "#/components/responses/Error400"
+        429:
+          $ref: "#/components/responses/Error429"
+        466:
+          $ref: "#/components/responses/Error466"
+        500:
+          $ref: "#/components/responses/Error500"
   /sendMessage:
     post:
       tags:
@@ -62,24 +78,6 @@ paths:
           $ref: "#/components/responses/Error466"
         500:
           $ref: "#/components/responses/Error500"
-  /getStateInstance:
-    get:
-      tags:
-        - "Account"
-      operationId: getStateInstance
-      summary: Метод предназначен для получения состояния аккаунта.
-      description: документация - https://green-api.com/docs/api/account/GetStateInstance/
-      responses:
-        200:
-          $ref: "#/components/responses/getStateInstance"
-        400:
-          $ref: "#/components/responses/Error400"
-        429:
-          $ref: "#/components/responses/Error429"
-        466:
-          $ref: "#/components/responses/Error466"
-        500:
-          $ref: "#/components/responses/Error500"
   /deleteNotification/{receiptId}:
     delete:
       tags:
@@ -92,30 +90,6 @@ paths:
       responses:
         200:
           $ref: "#/components/responses/deleteNotification"
-        400:
-          $ref: "#/components/responses/Error400"
-        429:
-          $ref: "#/components/responses/Error429"
-        466:
-          $ref: "#/components/responses/Error466"
-        500:
-          $ref: "#/components/responses/Error500"
-  /getChatHistory:
-    post:
-      tags:
-        - "Journals"
-      operationId: getChatHistory
-      summary: Получить историю чата
-      description: документация - https://green-api.com/en/docs/api/journals/GetChatHistory/
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/getChatHistoryDto"
-      responses:
-        200:
-          $ref: "#/components/responses/getChatHistory"
         400:
           $ref: "#/components/responses/Error400"
         429:
@@ -162,12 +136,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/deleteNotificationRes"
-    getChatHistory:
-      description: Ответ метода getChatHistory
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/getChatHistoryRes"
 
     Error400:
       description: bad request data
@@ -361,60 +329,6 @@ components:
           description: "Incoming notification deleting result: true - incoming notification successfully deleted from the queue; false - notification is not deleted - possible, if the notification was deleted earlier or receiptId doesn't correspond to the value previously received by ReceiveNotification method"
       example:
         result: true
-    getChatHistoryRes:
-      title: getChatHistoryRes
-      type: array
-      items:
-        required:
-          - "type"
-          - "timestamp"
-          - "idMessage"
-          - "typeMessage"
-          - "chatId"
-          - "senderName"
-          - "textMessage"
-        properties:
-          type:
-            type: string
-          timestamp:
-            type: integer
-          idMessage:
-            type: string
-          typeMessage:
-            type: string
-          chatId:
-            type: string
-          senderId:
-            type: string
-          senderName:
-            type: string
-          textMessage:
-            type: string
-        example:
-          - type: "incoming"
-            timestamp: 1603964449
-            idMessage: "3AADDD555CB0822C0539"
-            typeMessage: "textMessage"
-            chatId: "11001234567@c.us"
-            senderId: "11001234567@c.us"
-            senderName: "Andrew Sh"
-            textMessage: "I use Green-API to get this message from you!"
-          - type: "outgoing"
-            timestamp: 1603964445
-            idMessage: "3EB08816FEBCCC3FACD2"
-            statusMessage: "read"
-            typeMessage: "textMessage"
-            chatId: "11001234567@c.us"
-            textMessage: "I use Green-API to send this message to you!"
-          - type: "incoming"
-            timestamp: 1603964444
-            idMessage: "3AA45F9F285C5249CDFC"
-            typeMessage: "imageMessage"
-            chatId: "11001234567@c.us"
-            senderId: "11001234567@c.us"
-            senderName: "Andrew Sh"
-            downloadUrl: http://api.green-api.com/waInstance9075/downloadFile/download-file-id"
-            caption: "Green-API Logo"
 
     ErrorModel:
       title: ErrorModel

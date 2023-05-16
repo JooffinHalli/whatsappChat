@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react';
 import { getRoot, Instance } from 'mobx-state-tree';
 import { Obj } from 'utils';
 import { Root } from './Root';
+import { buildAsyncFlow } from './utils/asyncFlow';
 
 const initState = Obj.keysReduce(Root.properties, (acc, k) => {
   const value = Root.properties[k];
@@ -23,3 +24,5 @@ export const useMst = () => {
   }
   return store;
 };
+
+export const asyncFlow = buildAsyncFlow();
