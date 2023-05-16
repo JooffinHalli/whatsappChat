@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { observer } from "mobx-react-lite";
 import { useMst } from "mst";
-import { Chat, Auth } from "./pages";
+import { Auth, Messager } from "./pages";
 
 // Начальная логика находится в модели Root
 
@@ -11,7 +11,7 @@ export const App: FC = observer(() => {
 
   return (
     <>
-      {auth.isAuth ? <Chat /> : <Auth />}
+      {auth.isAuth ? <Messager /> : <Auth />}
     </>
   );
 });

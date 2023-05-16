@@ -1,24 +1,30 @@
 import { FC } from "react";
-import { Button, Checkbox, Form, Input, Row } from "antd";
+import { Button, Checkbox, Form, Input, Row, App } from "antd";
 import { form } from "./constants";
 import { useMst } from "mst";
 import styles from "./styles.module.css";
 
 export const Auth: FC = () => {
+
   const { auth } = useMst();
+  const { message } = App.useApp();
 
   const finish = ({ IdInstance, ApiTokenInstance, remember }: any) => {
     auth.setIdInstance(IdInstance, remember);
     auth.setApiTokenInstance(ApiTokenInstance, remember);
-    auth.login();
-  };
-
-  const finishFailed = (errorInfo: unknown) => {
-    console.log("Failed:", errorInfo);
+    auth.login().catch(() => {
+      message.error({
+        content: "Ошибка при попытке войти"
+      });
+    });
   };
 
   return (
-    <Row className={styles.wrapper} justify="center" align="middle">
+    <Row
+      className={styles.wrapper}
+      justify="center"
+      align="middle"
+    >
       <Form
         name="basic"
         labelCol={form.labelCol}
@@ -26,7 +32,6 @@ export const Auth: FC = () => {
         style={form.style}
         initialValues={form.initialValues}
         onFinish={finish}
-        onFinishFailed={finishFailed}
         autoComplete="off"
       >
         <Form.Item

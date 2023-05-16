@@ -1,0 +1,4 @@
+.content {
+  height: calc(100% - 127px);
+  border: 1px solid #262F34;
+}

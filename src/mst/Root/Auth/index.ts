@@ -1,5 +1,6 @@
 import { api, setApiState } from "api";
 import { types as t } from "mobx-state-tree";
+import { asyncFlow } from "mst";
 import { bool, str_undf } from "mst/utils/types";
 import { _ } from "utils";
 
@@ -44,13 +45,14 @@ export const Auth = t
       self.setApiTokenInstanceSimple(value);
     },
 
-    login: async () => {
+    login: () => {
       setApiState({
         IdInstance: +self.IdInstance!,
         ApiTokenInstance: self.ApiTokenInstance!
       });
-      const res = await api.getStateInstance();
-      self.setIsAuthSimple(res.stateInstance === "authorized");
+      return api.getStateInstance().then((res) => {
+        self.setIsAuthSimple(res.stateInstance === "authorized");
+      });
     }
     
   }))

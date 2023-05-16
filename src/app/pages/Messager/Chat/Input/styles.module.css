@@ -1,0 +1,27 @@
+.wrapper {
+  height: 62px;
+  border: 1px solid #262F34;
+  display: flex;
+  align-items: center;
+  background: #202C33;
+}
+.inputWrapper {
+  width: calc(100% - 70px);
+  margin-left: 10px;
+  border: 1px solid #262F34;
+}
+.iconWrapper {
+  width: 60px;
+  border: 1px solid #262F34;
+}
+.icon {
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 24px;
+}
+.icon:hover {
+  font-size: 26px;
+}
+.icon:active {
+  font-size: 24px;
+}
