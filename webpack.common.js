@@ -6,10 +6,11 @@ require("dotenv").config({ path: "./.env" });
 module.exports = {
   entry: "./src/index.tsx",
   resolve: {
-    extensions: [".ts", ".tsx"],
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
     alias: {
       api: path.resolve(__dirname, "src/api"),
       app: path.resolve(__dirname, "src/app"),
+      mst: path.resolve(__dirname, "src/mst"),
       utils: path.resolve(__dirname, "src/utils")
     }
   },

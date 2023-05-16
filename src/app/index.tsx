@@ -1,12 +1,17 @@
 import { FC } from "react";
-import styles from "./index.module.css";
-import { api } from "api";
+import { observer } from "mobx-react-lite";
+import { useMst } from "mst";
+import { Chat, Auth } from "./pages";
 
-export const App: FC = () => {
+// Начальная логика находится в модели Root
+
+export const App: FC = observer(() => {
+
+  const { auth } =  useMst();
 
   return (
-    <div className={styles.wrapper}>
-      hello from gh-pages with almoust ready api
-    </div>
+    <>
+      {auth.isAuth ? <Chat /> : <Auth />}
+    </>
   );
-};
+});

@@ -21,6 +21,13 @@ export const components = {
     }
   },
   responses: {
+    getStateInstance: {
+      content: {
+        'application/json': {
+          schema: schemas.getStateInstanceRes
+        }
+      }
+    },
     sendMessage: {
       content: {
         'application/json': {
@@ -81,6 +88,7 @@ export const components = {
   schemas: {
     sendMessageDto: schemas.sendMessageDto,
     getChatHistoryDto: schemas.getChatHistoryDto,
+    getStateInstanceRes: schemas.getStateInstanceRes,
     sendMessageRes: schemas.sendMessageRes,
     receiveNotificationRes: schemas.receiveNotificationRes,
     deleteNotificationRes: schemas.deleteNotificationRes,
