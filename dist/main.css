@@ -12,6 +12,8 @@
 html,
 body {
   height: 100vh;
+  background: #111B21;
+  color: #DFF3ED;
 }
 
 #root {
