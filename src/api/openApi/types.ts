@@ -52,6 +52,14 @@ export type Docs = {
       }
     }
   }
+  'getStateInstance': {
+    path: `getStateInstance`
+    get: {
+      res: {
+        stateInstance: string
+      }
+    }
+  }
   'deleteNotification': {
     path: `deleteNotification/${string}`
     delete: {

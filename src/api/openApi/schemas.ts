@@ -47,6 +47,24 @@ export const schemas = {
       }
     }
   },
+  getStateInstanceRes: {
+    type: 'object',
+    required: [
+      'stateInstance'
+    ],
+    properties: {
+      stateInstance: {
+        type: 'string',
+        enum: [
+          'notAuthorized',
+          'authorized',
+          'blocked',
+          'sleepMode',
+          'starting'
+        ]
+      }
+    }
+  },
   sendMessageRes: {
     type: 'object',
     required: [

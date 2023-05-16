@@ -1,28 +1,17 @@
-import { Obj } from 'utils';
-
 /** простые утилиты */
 export namespace _ {
 
-  /** arg is truthy by `!!` operator */
-  export const isTruthy = <T>(v: T): v is Truthy<T> => !!v;
+  export const toBlob = (v: string | number) => {
+    return new Blob([v!.toString()], { type: 'application/json' });
+  }
 
-  /** every arg is truthy by `!!` operator */
-  export const areTruthy = (...args: unknown[]) => args.every(isTruthy);
+  export const utf8_to_b64 = (str: string) => {
+    return window.btoa(str);
+  }
 
-  /** is undefined or null */
-  export const no = (v: unknown): v is (undefined | null) => (
-    (v === undefined) || (v === null)
-  );
-
-  /** is not undefined or null */
-  export const thereIs = <T>(v: T): v is NonNullable<T> => !no(v);
-
-  /** every arg is not undefined or null */
-  export const thereAre = (...args: unknown[]) => args.every(thereIs);
-
-  export const equalByToString = (v1?: String | Number, v2?: String | Number) => (
-    v1?.toString() === v2?.toString()
-  );
+  export const  b64_to_utf8 = (str: string) => {
+    return window.atob(str);
+  }
  
   /**
    * @example
@@ -52,18 +41,6 @@ export namespace _ {
     }
   });
 
-  export const isPrimitive = <T = PrimitiveName>(v: unknown): v is T => (
-    typeOf(v).is('undefined', 'null', 'boolean', 'number', 'string', 'symbol', 'bigint')
-  );
-
-  export const toBlob = (v: string | number) => {
-    return new Blob([v!.toString()], { type: 'application/json' });
-  }
-  
-  export const uuid = () => {
-    return Math.floor(Math.random() * 100) + Date.now();
-  }
-
   /** Если условие верное - вернет true, иначе выбросит ошибку */
   export const assert = <T extends (string | Error)>(cond: boolean, err: T, cb?: (err: T) => void) => {
     if (!cond) {
@@ -80,19 +57,7 @@ export namespace _ {
   export type DefinedDeep<T> = keyof Defined<T> extends never
     ? Defined<T>
     : Defined<{ [k in keyof T]-?: DefinedDeep<Defined<T>[k]> }>;
-
-  export type ReadonlyDeep<T> = keyof T extends never
-    ? T
-    : { readonly [k in keyof T]: DeepReadonly<T[k]> };
-  
-  export type JSONable = Obj.Any | any[];
-  
-  export type Primitive = string | number | boolean | undefined | null | symbol | bigint;
-  
-  export type PrimitiveName = 'string' | 'number' | 'boolean' | 'undefined' | 'null' | 'symbol' | 'bigint';
-  
-  export type Truthy<T> = T extends (undefined | null | 0 | '' | false) ? never : T;
-  
+          
   export type Assert<T> = (x: any) => asserts x is T;
 
 }

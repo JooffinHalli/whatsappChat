@@ -54,8 +54,6 @@ type OpenapiPaths<D extends DocsBase> = {
 
 /** Параметры для функции buildApi */
 export type Config<D extends DocsBase> = {
-  IdInstance: number
-  ApiTokenInstance: string
   /** Поле paths из openapi */
   openapi: OpenapiPaths<D>
   /** Ошибки на различные события */
@@ -131,15 +129,6 @@ export type MethodRes<
       }
     }
   } ? R : never;
-
-// export type MethodFn<
-//   D, // Docs
-//   E extends string, // Endpoint
-//   M extends string, // HttpMethod
-// > =
-//   [keyof MethodArgs<D, E, M>] extends {}
-//     ? (args?: MethodArgs<D, E, M>) => Promise<MethodRes<D, E, M>>
-//     : (args: MethodArgs<D, E, M>) => Promise<MethodRes<D, E, M>>
 
 export type MethodFn<
   D, // Docs

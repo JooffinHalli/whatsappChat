@@ -15,11 +15,6 @@ export const getSchema = (
     return Obj.keys(obj).toString().split(",").join(", ");
   }
 
-  console.log({
-    method,
-    openapi
-  });
-
   _.assert(
     !!openapi?.[method],
     new ApiError(errors.unknown)
@@ -139,12 +134,9 @@ class SchemaAsserter {
     _.assert(
       Array.isArray(data),
       new ApiError(this.#errors.typeGuard),
-      () => {
-        console.error(
-          `${new Date().toLocaleTimeString()} api["${this.#endpoint}"]["${this.#method}"]: ожидалася тип "array", получен тип "${this.#dataType(data)}"`
-        );
-      }
+      this.#logError(`ожидалася тип "array", получен тип "${this.#dataType(data)}"`)
     );
+    
     for (const el of data) {
       this.#assertObject(schema.items!, el);
     }
@@ -160,11 +152,15 @@ class SchemaAsserter {
   }
 
   #objKeysToStr(obj: Record<string, any>) {
-    return Obj.keys(obj).toString().split(",").join(", ");
+    return this.#serialized(Object.keys(obj));
   }
 
   #arrToStr(arr: string[]) {
-    return arr.toString().split(",").join(", ");
+    return this.#serialized(arr);
+  }
+
+  #serialized(data: Record<string, any> | any[]) {
+    return data.toString().split(",").join(", ");
   }
 }
 
