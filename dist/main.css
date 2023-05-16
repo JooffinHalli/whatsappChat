@@ -1,5 +1,5 @@
-.gnOgWVi72ZVkHLnyOyYX {
-  color: rgb(58, 52, 52)
+.yIqgSEygoiksw46ZyDBH {
+  height: 100%;
 }
 * {
   margin: 0;
@@ -7,4 +7,13 @@
   box-sizing: border-box;
   font-family: sans-serif;
   user-select: none;
+}
+
+html,
+body {
+  height: 100vh;
+}
+
+#root {
+  height: 100vh;
 }
