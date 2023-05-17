@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Button, Checkbox, Form, Input, Row, App } from "antd";
-import { form } from "./constants";
 import { useMst } from "mst";
+import { form } from "./constants";
 import styles from "./styles.module.css";
 
 export const Auth: FC = () => {
@@ -12,9 +12,9 @@ export const Auth: FC = () => {
   const finish = ({ IdInstance, ApiTokenInstance, remember }: any) => {
     auth.setIdInstance(IdInstance, remember);
     auth.setApiTokenInstance(ApiTokenInstance, remember);
-    auth.login().catch((err: string) => {
+    auth.login().catch((err: Error) => {
       message.error({
-        content: err || "Ошибка при попытке войти"
+        content: err.message || "Ошибка при попытке войти"
       });
     });
   };
