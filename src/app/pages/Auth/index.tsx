@@ -12,9 +12,9 @@ export const Auth: FC = () => {
   const finish = ({ IdInstance, ApiTokenInstance, remember }: any) => {
     auth.setIdInstance(IdInstance, remember);
     auth.setApiTokenInstance(ApiTokenInstance, remember);
-    auth.login().catch(() => {
+    auth.login().catch((err: string) => {
       message.error({
-        content: "Ошибка при попытке войти"
+        content: err || "Ошибка при попытке войти"
       });
     });
   };

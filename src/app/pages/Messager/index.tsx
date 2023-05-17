@@ -1,10 +1,11 @@
 import { FC } from "react";
 import { Col, Row } from "antd";
-import styles from "./styles.module.css";
 import { SideMenu } from "./SideMenu";
 import { Chat } from "./Chat";
+import styles from "./styles.module.css";
 
 export const Messager: FC = () => {
+
   return (
     <Row className={styles.wrapper}>
 

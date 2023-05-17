@@ -36,6 +36,24 @@ paths:
           $ref: "#/components/responses/Error466"
         500:
           $ref: "#/components/responses/Error500"
+  /getSettings:
+    get:
+      tags:
+        - "Account"
+      operationId: getSettings
+      summary: The method is aimed for getting the current account settings.
+      description: документация - https://green-api.com/en/docs/api/account/GetSettings/
+      responses:
+        200:
+          $ref: "#/components/responses/getSettings"
+        400:
+          $ref: "#/components/responses/Error400"
+        429:
+          $ref: "#/components/responses/Error429"
+        466:
+          $ref: "#/components/responses/Error466"
+        500:
+          $ref: "#/components/responses/Error500"
   /sendMessage:
     post:
       tags:
@@ -118,6 +136,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/getStateInstanceRes"
+    getSettings:
+      description: Ответ метода getSettings
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/getSettingsRes"
     sendMessage:
       description: Ответ метода sendMessage
       content:
@@ -218,8 +242,99 @@ components:
             - "sleepMode"
             - "starting"
           description: Состояние аккаунта
-      example:
-        stateInstance: "authorized"
+    getSettingsRes:
+      title: getSettingsRes
+      type: object
+      required:
+        - "wid"
+      properties:
+        wid:
+          type: string
+          description: Account ID in WhatsApp
+        countryInstance:
+          type: string
+          description: Account country code in accordance with standard ISO 3166-2
+        typeAccount:
+          type: string
+          description: "Account type, possible variants: trial, production, vip"
+        webhookUrl:
+          type: string
+          description: URL to receive incoming notifications
+        webhookUrlToken:
+          type: string
+          description: Token for connecting to your webhook server
+        delaySendMessagesMilliseconds:
+          type: integer
+          description: Message sending delay is in milliseconds
+        markIncomingMessagesReaded:
+          type: string
+          enum:
+            - "yes"
+            - "no"
+          description: "Mark incoming messages as read or not, possible variants: yes, no. Ignored if markIncomingMessagesReadedOnReply is 'yes'."
+        markIncomingMessagesReadedOnReply:
+          type: string
+          enum:
+            - "yes"
+            - "no"
+          description: "Mark incoming messages as read when sending a message to the chat via API, possible variants: yes, no. If 'yes', then markIncomingMessagesReaded setting is ignored."
+        outgoingWebhook:
+          type: string
+          enum:
+            - "yes"
+            - "no"
+          description: "Get notifications about outgoing messages sending / delivering / reading status, possible variants: yes, no"
+        outgoingMessageWebhook:
+          type: string
+          enum:
+            - "yes"
+            - "no"
+          description: "Get notifications about messages sent from phone, possible variants: yes, no"
+        stateWebhook:
+          type: string
+          enum:
+            - "yes"
+            - "no"
+          description: "Get notifications about changes in the account authorization status, possible variants: yes, no"
+        incomingWebhook:
+          type: string
+          enum:
+            - "yes"
+            - "no"
+          description: "Get notifications about incoming messages and files, possible variants: yes, no"
+        deviceWebhook:
+          type: string
+          enum:
+            - "yes"
+            - "no"
+          description: "Get notifications about the device (phone) and battery level, possible variants: yes, no"
+        statusInstanceWebhook:
+          type: string
+          enum:
+            - "yes"
+            - "no"
+          description: "Get notifications about the account socket connection status change, possible variants: yes, no"
+        sendFromUTC:
+          type: string
+          description: "Get the account setting - the delay of sending from the queue within the time interval AFTER the specified one (Attention, the time is indicated in UTC), possible variants: 09:00"
+        sendToUTC:
+          type: string
+          description: "Get the account setting - the delay of sending from the queue within the time interval BEFORE the specified one (Attention, the time is indicated in UTC), possible variants: 12:00"
+        sharedSession:
+          type: string
+          description: "Это поле не описано в документации, но по факту может прийти"
+        proxyInstance:
+          type: string
+          description: "Это поле не описано в документации, но по факту может прийти"
+        outgoingAPIMessageWebhook:
+          type: string
+          description: "Это поле не описано в документации, но по факту может прийти"
+        enableMessagesHistory:
+          type: string
+          description: "Это поле не описано в документации, но по факту может прийти"
+        keepOnlineStatus:
+          type: string
+          description: "Это поле не описано в документации, но по факту может прийти"
     sendMessageRes:
       title: sendMessageRes
       type: object
@@ -244,15 +359,12 @@ components:
         body:
           type: object
           description: Входящее уведомление согласно Формату входящих уведомлений
-          required:
-            - "typeWebhook"
-            - "instanceData"
-            - "timestamp"
-            - "idMessage"
-            - "senderData"
-            - "messageData"
           properties:
             typeWebhook:
+              type: string
+            sendByApi:
+              type: boolean
+            status:
               type: string
             instanceData:
               type: object
@@ -277,6 +389,7 @@ components:
                 - "chatId"
                 - "sender"
                 - "senderName"
+                - "chatName"
               properties:
                 chatId:
                   type: string
@@ -284,11 +397,12 @@ components:
                   type: string
                 senderName:
                   type: string
+                chatName:
+                  type: string
             messageData:
               type: object
               required:
                 - "typeMessage"
-                - "textMessageData"
               properties:
                 typeMessage:
                   type: string
@@ -299,7 +413,19 @@ components:
                   properties:
                     textMessage:
                       type: string
-
+                fileMessageData:
+                  type: object
+                  properties:
+                    caption:
+                      type: string
+                    downloadUrl:
+                      type: string
+                    fileName:
+                      type: string
+                    jpegThumbnail:
+                      type: string
+                    mimeType:
+                      type: string
       example:
         receiptId: 1234567
         body:

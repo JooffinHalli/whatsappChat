@@ -8,6 +8,42 @@
 */
 
 export type Docs = {
+  'getStateInstance': {
+    path: `getStateInstance`
+    get: {
+      res: {
+        stateInstance: string
+      }
+    }
+  }
+  'getSettings': {
+    path: `getSettings`
+    get: {
+      res: {
+        wid: string
+        countryInstance?: string
+        typeAccount?: string
+        webhookUrl?: string
+        webhookUrlToken?: string
+        delaySendMessagesMilliseconds?: number
+        markIncomingMessagesReaded?: string
+        markIncomingMessagesReadedOnReply?: string
+        outgoingWebhook?: string
+        outgoingMessageWebhook?: string
+        stateWebhook?: string
+        incomingWebhook?: string
+        deviceWebhook?: string
+        statusInstanceWebhook?: string
+        sendFromUTC?: string
+        sendToUTC?: string
+        sharedSession?: string
+        proxyInstance?: string
+        outgoingAPIMessageWebhook?: string
+        enableMessagesHistory?: string
+        keepOnlineStatus?: string
+      }
+    }
+  }
   'sendMessage': {
     path: `sendMessage`
     post: {
@@ -29,34 +65,36 @@ export type Docs = {
       res: {
         receiptId: number
         body: {
-          typeWebhook: string
-          instanceData: {
+          typeWebhook?: string
+          sendByApi?: boolean
+          status?: string
+          instanceData?: {
             idInstance: number
             wid: string
             typeInstance: string
           }
-          timestamp: number
-          idMessage: string
-          senderData: {
+          timestamp?: number
+          idMessage?: string
+          senderData?: {
             chatId: string
             sender: string
             senderName: string
+            chatName: string
           }
-          messageData: {
+          messageData?: {
             typeMessage: string
-            textMessageData: {
+            textMessageData?: {
               textMessage: string
+            }
+            fileMessageData?: {
+              caption?: string
+              downloadUrl?: string
+              fileName?: string
+              jpegThumbnail?: string
+              mimeType?: string
             }
           }
         }
-      }
-    }
-  }
-  'getStateInstance': {
-    path: `getStateInstance`
-    get: {
-      res: {
-        stateInstance: string
       }
     }
   }
@@ -66,27 +104,6 @@ export type Docs = {
       res: {
         result: boolean
       }
-    }
-  }
-  'getChatHistory': {
-    path: `getChatHistory`
-    post: {
-      body: {
-        chatId: string
-        count: number
-      }
-      res: Array<
-        {
-          type: string
-          timestamp: number
-          idMessage: string
-          typeMessage: string
-          chatId: string
-          senderId?: string
-          senderName: string
-          textMessage: string
-        }
-      >
     }
   }
 };

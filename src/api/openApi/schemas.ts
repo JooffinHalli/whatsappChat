@@ -65,6 +65,109 @@ export const schemas = {
       }
     }
   },
+  getSettingsRes: {
+    type: 'object',
+    required: [
+      'wid'
+    ],
+    properties: {
+      wid: {
+        type: 'string'
+      },
+      countryInstance: {
+        type: 'string'
+      },
+      typeAccount: {
+        type: 'string'
+      },
+      webhookUrl: {
+        type: 'string'
+      },
+      webhookUrlToken: {
+        type: 'string'
+      },
+      delaySendMessagesMilliseconds: {
+        type: 'integer'
+      },
+      markIncomingMessagesReaded: {
+        type: 'string',
+        enum: [
+          'yes',
+          'no'
+        ]
+      },
+      markIncomingMessagesReadedOnReply: {
+        type: 'string',
+        enum: [
+          'yes',
+          'no'
+        ]
+      },
+      outgoingWebhook: {
+        type: 'string',
+        enum: [
+          'yes',
+          'no'
+        ]
+      },
+      outgoingMessageWebhook: {
+        type: 'string',
+        enum: [
+          'yes',
+          'no'
+        ]
+      },
+      stateWebhook: {
+        type: 'string',
+        enum: [
+          'yes',
+          'no'
+        ]
+      },
+      incomingWebhook: {
+        type: 'string',
+        enum: [
+          'yes',
+          'no'
+        ]
+      },
+      deviceWebhook: {
+        type: 'string',
+        enum: [
+          'yes',
+          'no'
+        ]
+      },
+      statusInstanceWebhook: {
+        type: 'string',
+        enum: [
+          'yes',
+          'no'
+        ]
+      },
+      sendFromUTC: {
+        type: 'string'
+      },
+      sendToUTC: {
+        type: 'string'
+      },
+      sharedSession: {
+        type: 'string'
+      },
+      proxyInstance: {
+        type: 'string'
+      },
+      outgoingAPIMessageWebhook: {
+        type: 'string'
+      },
+      enableMessagesHistory: {
+        type: 'string'
+      },
+      keepOnlineStatus: {
+        type: 'string'
+      }
+    }
+  },
   sendMessageRes: {
     type: 'object',
     required: [
@@ -88,16 +191,14 @@ export const schemas = {
       },
       body: {
         type: 'object',
-        required: [
-          'typeWebhook',
-          'instanceData',
-          'timestamp',
-          'idMessage',
-          'senderData',
-          'messageData'
-        ],
         properties: {
           typeWebhook: {
+            type: 'string'
+          },
+          sendByApi: {
+            type: 'boolean'
+          },
+          status: {
             type: 'string'
           },
           instanceData: {
@@ -130,7 +231,8 @@ export const schemas = {
             required: [
               'chatId',
               'sender',
-              'senderName'
+              'senderName',
+              'chatName'
             ],
             properties: {
               chatId: {
@@ -141,14 +243,16 @@ export const schemas = {
               },
               senderName: {
                 type: 'string'
+              },
+              chatName: {
+                type: 'string'
               }
             }
           },
           messageData: {
             type: 'object',
             required: [
-              'typeMessage',
-              'textMessageData'
+              'typeMessage'
             ],
             properties: {
               typeMessage: {
@@ -161,6 +265,26 @@ export const schemas = {
                 ],
                 properties: {
                   textMessage: {
+                    type: 'string'
+                  }
+                }
+              },
+              fileMessageData: {
+                type: 'object',
+                properties: {
+                  caption: {
+                    type: 'string'
+                  },
+                  downloadUrl: {
+                    type: 'string'
+                  },
+                  fileName: {
+                    type: 'string'
+                  },
+                  jpegThumbnail: {
+                    type: 'string'
+                  },
+                  mimeType: {
                     type: 'string'
                   }
                 }
@@ -179,46 +303,6 @@ export const schemas = {
     properties: {
       result: {
         type: 'boolean'
-      }
-    }
-  },
-  getChatHistoryRes: {
-    type: 'array',
-    items: {
-      required: [
-        'type',
-        'timestamp',
-        'idMessage',
-        'typeMessage',
-        'chatId',
-        'senderName',
-        'textMessage'
-      ],
-      properties: {
-        type: {
-          type: 'string'
-        },
-        timestamp: {
-          type: 'integer'
-        },
-        idMessage: {
-          type: 'string'
-        },
-        typeMessage: {
-          type: 'string'
-        },
-        chatId: {
-          type: 'string'
-        },
-        senderId: {
-          type: 'string'
-        },
-        senderName: {
-          type: 'string'
-        },
-        textMessage: {
-          type: 'string'
-        }
       }
     }
   },

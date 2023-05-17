@@ -102,6 +102,11 @@ type Path<
        * по дефолту стоит `json`
        */
       responseType?: 'json' | 'text' | 'formData' | 'blob' | 'arrayBuffer'
+      /**
+       * указываем, нужны ли валидации респонса в рантайме
+       * по дефолту стоит `true`
+       */
+      assert?: boolean
       /** экземпляр класса AbortController, нужен для прерывания запросов */
       abortController?: AbortController
     }

@@ -1,5 +1,6 @@
 import { IAnyType, types as t } from 'mobx-state-tree';
 import { Primitives } from 'mobx-state-tree/dist/internal';
+import { LOADING_STATUSES } from 'utils';
 
 export const str = (init: string) => t.optional(t.string, init);
 export const num = (init: number) => t.optional(t.number, init);
@@ -25,3 +26,5 @@ export const mdls = <T extends IAnyType>(model: T) => t.array(mdl(model));
 
 export const liter  = <T extends Primitives>(init: T) => t.literal<T>(init);
 export const union = <T extends string>(arr: T[] | Readonly<T[]>, init: T) => t.optional(t.enumeration<T>(Object.values(arr)), init);
+
+export const LoadingStatus = union(Object.values(LOADING_STATUSES), LOADING_STATUSES.INIT);
