@@ -54,8 +54,8 @@ export const Auth = t
       await api.getStateInstance().then((res) => {
         if (res.stateInstance === "authorized") {
           self.setIsAuthSimple(true);
-        } else throw res.stateInstance;
-      });
+        } else throw new Error(res.stateInstance);
+      })
       api.getSettings().then((res) => {
         applySnapshot(self.settings, res);
       });
