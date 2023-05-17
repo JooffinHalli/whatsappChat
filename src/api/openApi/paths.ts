@@ -10,6 +10,30 @@
 import { components } from './components';
 
 export const paths = {
+  'getStateInstance': {
+    get: {
+      operationId: 'getStateInstance',
+      responses: {
+        200: components.responses.getStateInstance,
+        400: components.responses.Error400,
+        429: components.responses.Error429,
+        466: components.responses.Error466,
+        500: components.responses.Error500
+      }
+    }
+  },
+  'getSettings': {
+    get: {
+      operationId: 'getSettings',
+      responses: {
+        200: components.responses.getSettings,
+        400: components.responses.Error400,
+        429: components.responses.Error429,
+        466: components.responses.Error466,
+        500: components.responses.Error500
+      }
+    }
+  },
   'sendMessage': {
     post: {
       operationId: 'sendMessage',
@@ -42,18 +66,6 @@ export const paths = {
       }
     }
   },
-  'getStateInstance': {
-    get: {
-      operationId: 'getStateInstance',
-      responses: {
-        200: components.responses.getStateInstance,
-        400: components.responses.Error400,
-        429: components.responses.Error429,
-        466: components.responses.Error466,
-        500: components.responses.Error500
-      }
-    }
-  },
   'deleteNotification': {
     delete: {
       operationId: 'deleteNotification',
@@ -62,26 +74,6 @@ export const paths = {
       ],
       responses: {
         200: components.responses.deleteNotification,
-        400: components.responses.Error400,
-        429: components.responses.Error429,
-        466: components.responses.Error466,
-        500: components.responses.Error500
-      }
-    }
-  },
-  'getChatHistory': {
-    post: {
-      operationId: 'getChatHistory',
-      requestBody: {
-        required: true,
-        content: {
-          'application/json': {
-            schema: components.schemas.getChatHistoryDto
-          }
-        }
-      },
-      responses: {
-        200: components.responses.getChatHistory,
         400: components.responses.Error400,
         429: components.responses.Error429,
         466: components.responses.Error466,

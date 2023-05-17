@@ -28,15 +28,15 @@ function runScript(apiJson) {
   }
 
   const handlers = {
-    'string': `__str('')__`,
-    'integer': `__num(0)__`,
-    'boolean': `__bool(false)__`
+    'string': `__T.str('')__`,
+    'integer': `__T.num(0)__`,
+    'boolean': `__T.bool(false)__`
   }
 
   const optionalHandlers = {
-    'string': `__str_null_undf()__`,
-    'integer': `__num_null_undf()__`,
-    'boolean': `__bool_null_undf()__`
+    'string': `__T.str_undf()__`,
+    'integer': `__T.num_undf()__`,
+    'boolean': `__T.bool_undf()__`
   }
 
   const toMst = (schema) => {
@@ -71,7 +71,7 @@ function runScript(apiJson) {
     const template = Template.content(
       repoLink,
       repoBranch,
-      `import { str, num, str_null_undf, num_null_undf, bool_null_undf } from 'mst/utils/types';
+      `import * as T from 'mst/utils/types';
 
 export const ${name} = ${toJson(schemas[schema])} as const;`);
 
@@ -87,8 +87,7 @@ export const ${name} = ${toJson(schemas[schema])} as const;`);
       const name = schema.replace('Model', 'Schema');
       return isLast
         ? `export * from './${name}';`
-        : `export * from './${name}';
-    `
+        : `export * from './${name}';\n`
     }).join('')}`);
 
   fs.writeFile(`../../src/mst/schemas/index.ts`, template, null, () => {});

@@ -1,14 +1,15 @@
 import { api, setApiState } from "api";
-import { types as t } from "mobx-state-tree";
-import { asyncFlow } from "mst";
-import { bool, str_undf } from "mst/utils/types";
+import { applySnapshot, types as t } from "mobx-state-tree";
+import { bool, mdl, str_undf } from "mst/utils/types";
 import { _ } from "utils";
+import { Settings } from "./Settings";
 
 export const Auth = t
   .model("Root.Auth", {
     IdInstance: str_undf(),
     ApiTokenInstance: str_undf(),
-    isAuth: bool(false)
+    isAuth: bool(false),
+    settings: mdl(Settings)
   })
 
   .actions((self) => ({
@@ -45,13 +46,18 @@ export const Auth = t
       self.setApiTokenInstanceSimple(value);
     },
 
-    login: () => {
+    login: async () => {
       setApiState({
         IdInstance: +self.IdInstance!,
         ApiTokenInstance: self.ApiTokenInstance!
       });
-      return api.getStateInstance().then((res) => {
-        self.setIsAuthSimple(res.stateInstance === "authorized");
+      await api.getStateInstance().then((res) => {
+        if (res.stateInstance === "authorized") {
+          self.setIsAuthSimple(true);
+        } else throw res.stateInstance;
+      });
+      api.getSettings().then((res) => {
+        applySnapshot(self.settings, res);
       });
     }
     

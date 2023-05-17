@@ -42,12 +42,13 @@ export const buildApi = <D extends DocsBase>({
         body,
         headers = { "Content-Type": "application/json" } as Http.RequestHeaders,
         responseType = "json",
+        assert = true,
         abortController = new AbortController()
       } = args;
 
       const { IdInstance, ApiTokenInstance } = getApiState();
 
-      assertApiState({ IdInstance, ApiTokenInstance });
+      if (assert) assertApiState({ IdInstance, ApiTokenInstance });
 
       const baseUrl = `${API_HOST}/waInstance${IdInstance}`;
       const url = `${baseUrl}/${methodName}/${ApiTokenInstance}`;
@@ -66,13 +67,13 @@ export const buildApi = <D extends DocsBase>({
           signal: abortController.signal
         }).then(handleResData).catch(handleResError);
   
-        const schema = getSchema(
+        const schema = assert ? getSchema(
           res,
           methodName || method,
           httpMethod,
           _errors,
           openapi
-        );
+        ) : null;
 
         const data = await res[responseType]().catch(() => {
           _logError(`не удалось привести response к '${responseType}'`);

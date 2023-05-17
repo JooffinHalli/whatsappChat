@@ -1,15 +1,17 @@
 import { types as t } from "mobx-state-tree";
 import { mdl } from "mst/utils/types";
+import { _ } from "utils";
 
 import { Auth } from "./Auth";
 import { Chat } from "./Chat";
-import { _ } from "utils";
+import { Menu } from "./Menu";
 
 export const Root = t
   .model("Root", {
      
     auth: mdl(Auth),
-    chat: mdl(Chat)
+    chat: mdl(Chat),
+    menu: mdl(Menu)
    
    })
    .actions((self) => ({
