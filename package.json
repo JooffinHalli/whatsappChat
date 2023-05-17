@@ -11,7 +11,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d public",
     "postdeploy": "echo \"check https://jooffinhalli.github.io/whatsappChat/\"",
-    "api": "cd npm-scripts && npm run api https://github.com/JooffinHalli/whatsappChat.git main"
+    "api": "cd npm-scripts && npm run api https://github.com/JooffinHalli/whatsappChat.git main mst=true"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",

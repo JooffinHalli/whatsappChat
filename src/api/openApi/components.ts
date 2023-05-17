@@ -28,6 +28,13 @@ export const components = {
         }
       }
     },
+    getSettings: {
+      content: {
+        'application/json': {
+          schema: schemas.getSettingsRes
+        }
+      }
+    },
     sendMessage: {
       content: {
         'application/json': {
@@ -46,13 +53,6 @@ export const components = {
       content: {
         'application/json': {
           schema: schemas.deleteNotificationRes
-        }
-      }
-    },
-    getChatHistory: {
-      content: {
-        'application/json': {
-          schema: schemas.getChatHistoryRes
         }
       }
     },
@@ -89,10 +89,10 @@ export const components = {
     sendMessageDto: schemas.sendMessageDto,
     getChatHistoryDto: schemas.getChatHistoryDto,
     getStateInstanceRes: schemas.getStateInstanceRes,
+    getSettingsRes: schemas.getSettingsRes,
     sendMessageRes: schemas.sendMessageRes,
     receiveNotificationRes: schemas.receiveNotificationRes,
     deleteNotificationRes: schemas.deleteNotificationRes,
-    getChatHistoryRes: schemas.getChatHistoryRes,
     ErrorModel: schemas.ErrorModel
   }
 } as const;

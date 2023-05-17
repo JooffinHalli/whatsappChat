@@ -1,4 +1,13 @@
 .content {
   height: calc(100% - 127px);
   border: 1px solid #262F34;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.block {
+  padding: 10px;
+  border: 1px solid #262F34;
+  min-height: 200px;
+  width: 80%;
 }
